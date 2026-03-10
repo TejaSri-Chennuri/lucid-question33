@@ -1,0 +1,36 @@
+from collections import defaultdict
+
+def analyze_logs(file_path):
+
+    user_count = defaultdict(int)
+    action_count = defaultdict(int)
+
+    most_active_user = None
+    most_common_action = None
+
+    with open(file_path, "r") as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+
+            timestamp, user_id, action = line.split(",")
+
+            # count user actions
+            user_count[user_id] += 1
+            if most_active_user is None or user_count[user_id] > user_count[most_active_user]:
+                most_active_user = user_id
+
+            # count actions
+            action_count[action] += 1
+            if most_common_action is None or action_count[action] > action_count[most_common_action]:
+                most_common_action = action
+
+    return most_active_user, most_common_action
+
+
+# Example usage
+user, action = analyze_logs("logs.txt")
+
+print("Most Active User:", user)
+print("Most Common Action:", action)
